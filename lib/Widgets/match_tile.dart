@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:score_app/Models/match_model.dart';
 
 Widget matchTile(MatchModel match) {
+  var homeGoal = match.goals!.home;
+  var awayGoal = match.goals!.away;
+  homeGoal ??= 0;
+  awayGoal ??= 0;
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 12),
     child: Row(

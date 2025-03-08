@@ -1,13 +1,15 @@
 class GoalsModel {
-  int? home;
-  int? away;
+  final int home;
+  final int away;
 
   GoalsModel({
-    this.home,
-    this.away,
+    required this.home,
+    required this.away,
   });
 
   factory GoalsModel.fromJson(Map<String, dynamic> json) {
-    return GoalsModel(home: json['home'], away: json['away']);
+    return GoalsModel(
+        home: int.tryParse(json['home'].toString()) ?? 0,
+        away: int.tryParse(json['away'].toString()) ?? 0);
   }
 }

@@ -9,8 +9,8 @@ class FixtureModel {
 
   factory FixtureModel.fromJson(Map<String, dynamic> json) {
     return FixtureModel(
-        id: json['id'],
-        date: json['date'],
+        id: int.tryParse(json['id'].toString()),
+        date: int.tryParse(json['date'].toString()),
         status: StatusModel.fromJson(json['status']));
   }
 }

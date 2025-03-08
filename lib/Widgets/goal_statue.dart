@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
-Widget goalStatue(int expandedTime, int homeGoal, int awayGoal) {
+Widget goalStatue(var expandedTime, var homeGoal, var awayGoal) {
+  var home = homeGoal;
+  var away = awayGoal;
   var elapsed = expandedTime;
+
+  home ??= 0;
+  away ??= 0;
+  elapsed ??= 0;
   return Expanded(
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.center,

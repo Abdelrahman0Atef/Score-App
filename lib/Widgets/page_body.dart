@@ -1,67 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:score_app/Models/match_model.dart';
-import 'package:score_app/Widgets/goal_statue.dart';
 import 'package:score_app/Widgets/match_tile.dart';
-import 'package:score_app/Widgets/team_statue.dart';
 
 Widget pageBody(List<MatchModel> allMatches) {
-  return Column(
-    children: [
-      Expanded(
-        flex: 2,
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                teamStatue('Local Team', (allMatches[0].home!.logo).toString(),
-                    (allMatches[0].home!.name).toString()),
-                goalStatue(
-                    (allMatches[0].fixture!.status!.elapsed)!.toInt(),
-                    (allMatches[0].goals!.home)!.toInt(),
-                    (allMatches[0].goals!.away)!.toInt()),
-                teamStatue(
-                    'Visitor Team',
-                    (allMatches[0].away!.logo).toString(),
-                    (allMatches[0].away!.name).toString()),
-              ],
-            ),
+  final leagueMatches = _groupMatchesByLeague(allMatches);
+
+  return ListView.builder(
+    itemCount: leagueMatches.keys.length,
+    itemBuilder: (context, index) {
+      final leagueName = leagueMatches.keys.elementAt(index);
+      final matches = leagueMatches[leagueName]!;
+
+      return _buildLeagueCard(leagueName, matches);
+    },
+  );
+}
+
+Map<String, List<MatchModel>> _groupMatchesByLeague(List<MatchModel> matches) {
+  final Map<String, List<MatchModel>> result = {};
+  for (final match in matches) {
+    final key = match.leagueName ?? 'Unknown League';
+    if (!result.containsKey(key)) result[key] = [];
+    result[key]!.add(match);
+  }
+  return result;
+}
+
+Widget _buildLeagueCard(String leagueName, List<MatchModel> matches) {
+  return Card(
+    color: const Color(0xff272727),
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: Column(
+      children: [
+        _buildLeagueHeader(matches.first),
+        _buildMatchesList(matches),
+      ],
+    ),
+  );
+}
+
+Widget _buildLeagueHeader(MatchModel match) {
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Row(
+      children: [
+        /*
+        Image.network(
+          match.leagueFlagUrl,
+          width: 20,
+          height: 20,
+        ),*/
+        const SizedBox(width: 10),
+        Text(
+          match.leagueName ?? 'Unknown League',
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white70,
           ),
         ),
-      ),
-      Expanded(
-        flex: 5,
-        child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Colors.pink,
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(40), topLeft: Radius.circular(40)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Mathes',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: allMatches.length,
-                      itemBuilder: (context, index) {
-                        return matchTile(allMatches[index]);
-                      }),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    ],
+      ],
+    ),
+  );
+}
+
+Widget _buildMatchesList(List<MatchModel> matches) {
+  return Container(
+    height: 150,
+    decoration: BoxDecoration(
+      color: const Color(0xff37c88d),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: ListView.builder(
+      itemCount: matches.length,
+      itemBuilder: (context, index) => matchTile(matches[index]),
+    ),
   );
 }

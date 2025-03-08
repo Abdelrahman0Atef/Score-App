@@ -6,7 +6,7 @@ Widget teamStatue(String team, String urlLogo, String teamName) {
     children: [
       Text(
         team,
-        style: const TextStyle(fontSize: 20),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       const SizedBox(
         height: 10,

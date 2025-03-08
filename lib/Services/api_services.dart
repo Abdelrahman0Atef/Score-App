@@ -1,34 +1,45 @@
 import 'dart:convert';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:score_app/Models/match_model.dart';
 
 class ApiServices {
   static const headers = {
     'x-rapidapi-host': 'v3.football.api-sports.io',
-    'x-rapidapi-key': 'f145208e500ec57f78894f6d6c8ef3fa'
+    'x-rapidapi-key': 'da98c33da78ae51c2913a314949eb4b8'
   };
 
-  Future<List<MatchModel>> getAllMatches() async {
-    final apiUrl =
-        Uri.parse('https://v3.football.api-sports.io/fixtures?live=all');
+  Future<Map<String, String>> _getCountryCodeMap() async {
+    final response = await http.get(
+      Uri.parse('https://v3.football.api-sports.io/countries'),
+      headers: headers,
+    );
 
-    Response response = await get(apiUrl, headers: headers);
-
-    try {
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        List<dynamic> matchsList = body['response'];
-        print(body);
-        print(
-            '------------------------------------------------------------------------');
-        List<MatchModel> matchs = matchsList
-            .map((dynamic item) => MatchModel.fromJson(item))
-            .toList();
-        return matchs;
+    Map<String, String> countryMap = {};
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      for (var country in data['response']) {
+        countryMap[country['name']] = country['code'] ?? '';
       }
-      throw Exception('Faild Data ${response.statusCode}');
-    } catch (ex) {
-      throw Exception('Faild Data $ex');
     }
+    return countryMap;
+  }
+
+  Future<List<MatchModel>> getAllMatches() async {
+    final matchesResponse = await http.get(
+      Uri.parse('https://v3.football.api-sports.io/fixtures?live=all'),
+      headers: headers,
+    );
+
+    if (matchesResponse.statusCode != 200) {
+      throw Exception('Failed to load matches');
+    }
+
+    final countryMap = await _getCountryCodeMap();
+    final matchesData = jsonDecode(matchesResponse.body);
+
+    return (matchesData['response'] as List).map((match) {
+      final countryName = match['league']['country']?.toString() ?? '';
+      return MatchModel.fromJson(match, countryMap[countryName] ?? '');
+    }).toList();
   }
 }
