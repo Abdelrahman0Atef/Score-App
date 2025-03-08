@@ -1,16 +1,23 @@
-# score_app
+# Score App
+**The Goal**<br/>
+The goal of this app was to create a real-time score tracking app that displays live match updates and results, organized by league and team.
 
-A new Flutter project.
+## What I Built
+I built a modern score tracking app that provides users with up-to-the-minute match information, including live scores and final results, neatly presented in cards categorized by league.
 
-## Getting Started
+## The Finished App
+In the end, I successfully created a functional score tracking app that displays real-time match data, organized by league, with clear and concise cards for each match.
 
-This project is a starting point for a Flutter application.
+## App Preview Demo
+![scoreapp](https://github.com/user-attachments/assets/a884a728-f970-4889-a993-728b6d164056)
 
-A few resources to get you started if this is your first Flutter project:
+## What I Learned
+**I revisited the following concepts:**<br/>
+• Using ListViews to create scrollable views.<br/>
+• How to efficiently display data in cards.<br/>
+• How to integrate and consume data from an API.<br/>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**I learned the following concepts:**<br/>
+• How to implement a splash screen for a smooth user experience.<br/>
+• How to efficiently manage and display real-time data updates.<br/>
+• How to structure data from an API to create a nested list grouped by league.<br/>
